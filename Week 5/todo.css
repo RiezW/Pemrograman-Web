@@ -37,6 +37,11 @@ button {
     cursor: pointer;
 }
 
+.completed {
+    color: #888;
+    text-decoration: line-through;
+}
+
 #bagianbawah {
     
 }
