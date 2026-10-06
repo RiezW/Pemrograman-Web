@@ -1,0 +1,169 @@
+* {
+    box-sizing: border-box;
+    margin: 5px;
+    padding: 0px;
+}
+
+body, input, textarea, button {
+    font-size: 1rem;
+}
+
+body {
+    margin: 0;
+}
+
+#content {
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+}
+
+.top-section {
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+    padding: 1rem;
+    gap: 0.5rem;
+    place-items: center;
+    justify-content: space-between;
+    background-color: rgb(112, 82, 139);
+    border-radius: 0;
+    width: 100vw;
+    margin: 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1;
+}
+
+
+
+#search-bar {
+    flex: 1;
+}
+
+#search-bar input, textarea {
+    width: 100%;
+    padding: 5px;
+    border: 2px solid black;
+    border-radius: 1rem;
+}
+
+#iconprofile {
+    background-color: red;
+    border-radius: 50%;
+    width: 2rem;
+    height: 2rem;
+    place-items: center;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.preview-promo {
+    background-color: #bc6060;
+    border-radius: 1rem;
+    padding: 10px;
+    line-height: 0.8rem;
+    width: 100%;
+    height: 100%;
+}
+
+#info {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;
+    background-color: rgb(197, 175, 216);
+    border: 5px solid rgb(197, 175, 216);
+    border-radius: 1rem;
+    font-size: 1rem;
+}
+
+.menufull {
+    
+    background-color: rgb(197, 175, 216);
+    width: 100%;
+    height: 100%;
+    display: grid;
+    justify-content: space-between;
+    border: 5px solid rgb(197, 175, 216);
+    border-radius: 1rem;
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.menu-item {
+    background-color: red;
+    min-height: 2rem;
+    aspect-ratio: 1;
+    border-radius: 0.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+nav {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    width: 100vw;
+    background-color: rgb(112, 82, 139);
+    border-radius: 0;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    margin: 0;
+}
+
+#flash-sale {
+    width: 100%;
+    padding: 5px;
+}
+
+#atas-pokonya {
+    display: flex;
+    justify-content: space-between;
+}
+
+#kotak-flash {
+    display: flex;
+    gap: 5px;
+}
+
+.produk {
+    background-color: rgb(197, 175, 216);
+    border: 5px solid rgb(197, 175, 216);
+    border-radius: 1rem;
+    width: 50%;
+    min-height: 10rem;
+    padding: 5px;
+}
+
+.diskon {
+    background-color: yellow;
+    width: max-content;
+    margin-left: auto;
+    font-size: 1rem;
+    border-radius: 5px;
+    padding: 1px;
+}
+
+.gambar-produk {
+    background-color: red;
+    height: 5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;k
+    font-size: 1rem;
+    border-radius: 10px;
+}
+
+.produk h4 {
+    font-size: 1rem;
+}
+
+.harga {
+    color: red;
+    font-weight: bold;
+}

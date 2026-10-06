@@ -1,0 +1,66 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 30px 15px;
+    font-family: Arial, sans-serif;
+    background-color: #f5efe6;
+    color: #333;
+}
+
+.display {
+    margin-bottom: 15px;
+}
+
+.display input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 24px;
+    text-align: right;
+}
+
+.container {
+    width: min(500px, 100%);
+    margin: auto;
+    padding: 25px;
+    border-radius: 10px;
+    background-color: white;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, .1);
+}
+
+.keypad_container {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+    width: 100%;
+    margin: 15px 0 0;
+}
+
+.column1,
+.column2,
+.column3,
+.column4 {
+    display: grid;
+    grid-template-rows: repeat(4, minmax(55px, auto));
+    gap: 8px;
+}
+
+.row_4 {
+    grid-column: 1 / -1;
+}
+
+.row_4 button {
+    width: 100%;
+}
+
+button {
+    padding: 1rem;
+    font-size: 20px;
+    border-radius: 10px;
+    margin: 0;
+}
+
