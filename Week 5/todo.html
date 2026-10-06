@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="todo.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Task Tracker Kuliah</h1>
+        <form id="taskform">
+            <div class="bagianatas">
+                <input type="text" placeholder="Task Name" required>
+                <select name="Mata Kuliah" id="matkul" required>
+                    <option value="" disabled selected hidden>-- Pilih Mata Kuliah --</option>
+                    <option value="Ethical Hacking dan Uji Keamanan Siber">Ethical Hacking dan Uji Keamanan Siber</option>
+                    <option value="Keamanan Jaringan Komputer">Keamanan Jaringan Komputer</option>
+                    <option value="Pemrograman Web">Pemrograman Web</option>
+                </select>
+                <input type="date" required>
+                <button type="submit">Tambah</button>
+            </div>
+
+            <div class="bagianbawah">
+                <button id="semua">semua</button>
+                <button id="aktif">aktif</button>
+                <button id="selesai">selesai</button>
+            </div>
+
+            </div>
+
+                <ul id="tasklist"></ul>
+            </div>
+        </form>
+    </div>
+    <script src="todo.js"></script>
+</body>
+</html>
