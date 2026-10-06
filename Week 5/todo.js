@@ -4,13 +4,31 @@ const matkulInput = document.getElementById("matkul");
 const deadlineInput = document.getElementById("deadline");
 const formerror = document.getElementById("formerror");
 const tasklist = document.getElementById("tasklist");
+const filterButtons = document.querySelectorAll("[data-filter]");
 
 const task = [];
+let currentFilter = "semua";
 
 function render() {
     tasklist.innerHTML = "";
 
-    task.forEach((item) => {
+    const visibleTasks = task.filter((item) => {
+        if (currentFilter === "aktif") {
+            return !item.selesai;
+        }
+        if (currentFilter === "selesai") {
+            return item.selesai;
+        }
+        return true;
+    });
+
+    filterButtons.forEach((button) => {
+        const isActive = button.dataset.filter === currentFilter;
+        button.classList.toggle("on", isActive);
+        button.setAttribute("aria-pressed", String(isActive));
+    });
+
+    visibleTasks.forEach((item) => {
         const listItem = document.createElement("li");
         listItem.dataset.id = item.id;
 
@@ -38,6 +56,13 @@ function render() {
 }
 
 render();
+
+filterButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+        currentFilter = button.dataset.filter;
+        render();
+    });
+});
 
 taskform.addEventListener("submit", (event) => {
     event.preventDefault();

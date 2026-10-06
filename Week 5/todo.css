@@ -37,6 +37,10 @@ button {
     cursor: pointer;
 }
 
+.bagianbawah button.on {
+    background-color: hsl(250, 90%, 40%);
+}
+
 .completed {
     color: #888;
     text-decoration: line-through;
