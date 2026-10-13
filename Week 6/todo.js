@@ -46,7 +46,6 @@ function render() {
         const checkbox = document.createElement("input");
         checkbox.type = "checkbox";
         checkbox.checked = item.selesai;
-        checkbox.disabled = true;
         checkbox.setAttribute("aria-label", `Status ${item.judul}`);
 
         const details = document.createElement("span");
@@ -65,7 +64,6 @@ function render() {
         const deleteButton = document.createElement("button");
         deleteButton.type = "button";
         deleteButton.textContent = "Hapus";
-        deleteButton.disabled = true;
         deleteButton.setAttribute("aria-label", `Hapus ${item.judul}`);
 
         listItem.append(checkbox, details, deleteButton);
@@ -187,6 +185,73 @@ taskform.addEventListener("submit", async (event) => {
         formerror.textContent = `Gagal menambahkan tugas: ${error.message}`;
     } finally {
         submitButton.disabled = loadstate.dataset.state !== "loaded";
+    }
+});
+
+tasklist.addEventListener("change", async (event) => {
+    if (!(event.target instanceof HTMLInputElement) || event.target.type !== "checkbox") {
+        return;
+    }
+
+    const listItem = event.target.closest("li[data-id]");
+    const taskItem = task.find((item) => String(item.id) === listItem?.dataset.id);
+    if (!taskItem) {
+        return;
+    }
+
+    const checkbox = event.target;
+    const nextStatus = checkbox.checked;
+    checkbox.disabled = true;
+    formerror.textContent = "";
+
+    try {
+        const updatedTask = await api(`/api/tugas/${encodeURIComponent(taskItem.id)}`, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ selesai: nextStatus })
+        });
+
+        if (updatedTask !== null && !isTask(updatedTask)) {
+            throw new Error("Format tugas dari server tidak valid.");
+        }
+
+        Object.assign(taskItem, updatedTask || { selesai: nextStatus });
+        render();
+    } catch (error) {
+        formerror.textContent = `Gagal memperbarui tugas: ${error.message}`;
+        render();
+    }
+});
+
+tasklist.addEventListener("click", async (event) => {
+    if (!(event.target instanceof HTMLButtonElement)) {
+        return;
+    }
+
+    const listItem = event.target.closest("li[data-id]");
+    const taskItem = task.find((item) => String(item.id) === listItem?.dataset.id);
+    if (!taskItem) {
+        return;
+    }
+
+    const deleteButton = event.target;
+    const checkbox = listItem.querySelector('input[type="checkbox"]');
+    deleteButton.disabled = true;
+    checkbox.disabled = true;
+    formerror.textContent = "";
+
+    try {
+        await api(`/api/tugas/${encodeURIComponent(taskItem.id)}`, {
+            method: "DELETE"
+        });
+
+        task = task.filter((item) => item !== taskItem);
+        render();
+    } catch (error) {
+        formerror.textContent = `Gagal menghapus tugas: ${error.message}`;
+        render();
     }
 });
 
