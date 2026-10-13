@@ -1,0 +1,18 @@
+{
+  "tugas": [
+    {
+      "id": 1,
+      "judul": "Belajar REST API",
+      "matkul": "Pemrograman Web",
+      "deadline": "2026-10-15",
+      "selesai": false
+    },
+    {
+      "id": 2,
+      "judul": "Membaca materi",
+      "matkul": "Keamanan Jaringan Komputer",
+      "deadline": "2026-10-20",
+      "selesai": true
+    }
+  ]
+}

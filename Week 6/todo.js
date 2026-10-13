@@ -9,6 +9,7 @@ const filterButtons = document.querySelectorAll("[data-filter]");
 const loadstate = document.getElementById("loadstate");
 const retryButton = document.getElementById("retry");
 const taskcount = document.getElementById("taskcount");
+const API_URL = "http://localhost:3000/tugas";
 
 let task = [];
 let currentFilter = "semua";
@@ -134,7 +135,7 @@ async function loadTasks() {
     render();
 
     try {
-        const result = await api("/api/tugas");
+        const result = await api(API_URL);
         const validTasks = Array.isArray(result) && result.every(isTask);
         if (!validTasks) {
             throw new Error("Format data tugas dari server tidak valid.");
@@ -174,12 +175,12 @@ taskform.addEventListener("submit", async (event) => {
     formerror.textContent = "";
 
     try {
-        const createdTask = await api("/api/tugas", {
+        const createdTask = await api(API_URL, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({ judul, matkul, deadline })
+            body: JSON.stringify({ judul, matkul, deadline, selesai: false })
         });
 
         if (!isTask(createdTask)) {
@@ -213,7 +214,7 @@ tasklist.addEventListener("change", async (event) => {
     formerror.textContent = "";
 
     try {
-        const updatedTask = await api(`/api/tugas/${encodeURIComponent(taskItem.id)}`, {
+        const updatedTask = await api(`${API_URL}/${encodeURIComponent(taskItem.id)}`, {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json"
@@ -251,7 +252,7 @@ tasklist.addEventListener("click", async (event) => {
     formerror.textContent = "";
 
     try {
-        await api(`/api/tugas/${encodeURIComponent(taskItem.id)}`, {
+        await api(`${API_URL}/${encodeURIComponent(taskItem.id)}`, {
             method: "DELETE"
         });
 

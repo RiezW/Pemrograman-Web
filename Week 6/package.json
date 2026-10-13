@@ -1,0 +1,8 @@
+{
+  "name": "task-tracker-week-6",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "api": "node server.js"
+  }
+}
