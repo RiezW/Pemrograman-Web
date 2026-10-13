@@ -80,7 +80,13 @@ function render() {
 }
 
 async function api(path, options) {
-    const response = await fetch(path, options);
+    let response;
+    try {
+        response = await fetch(path, options);
+    } catch {
+        throw new Error("Tidak dapat terhubung ke server. Periksa koneksi lalu coba lagi.");
+    }
+
     const responseText = await response.text();
     let result = null;
 
@@ -91,14 +97,16 @@ async function api(path, options) {
             if (response.ok) {
                 throw new Error("Respons server bukan JSON yang valid.");
             }
-            result = responseText;
+            if (response.headers.get("content-type")?.includes("text/plain")) {
+                result = responseText.trim();
+            }
         }
     }
 
     if (!response.ok) {
         const serverMessage = typeof result === "string"
             ? result
-            : result && (result.message || result.error);
+            : result && (result.message || result.error || result.detail);
         throw new Error(
             typeof serverMessage === "string" && serverMessage
                 ? serverMessage
