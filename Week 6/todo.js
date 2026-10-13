@@ -1,3 +1,9 @@
+const taskform = document.getElementById("taskform");
+const judulInput = document.getElementById("judul");
+const matkulInput = document.getElementById("matkul");
+const deadlineInput = document.getElementById("deadline");
+const formerror = document.getElementById("formerror");
+const submitButton = taskform.querySelector('button[type="submit"]');
 const tasklist = document.getElementById("tasklist");
 const filterButtons = document.querySelectorAll("[data-filter]");
 const loadstate = document.getElementById("loadstate");
@@ -75,29 +81,44 @@ function render() {
     }
 }
 
-async function api(path) {
-    const response = await fetch(path);
-    let result;
+async function api(path, options) {
+    const response = await fetch(path, options);
+    const responseText = await response.text();
+    let result = null;
 
-    try {
-        result = await response.json();
-    } catch {
-        if (!response.ok) {
-            throw new Error(`Gagal memuat tugas (HTTP ${response.status}).`);
+    if (responseText) {
+        try {
+            result = JSON.parse(responseText);
+        } catch {
+            if (response.ok) {
+                throw new Error("Respons server bukan JSON yang valid.");
+            }
+            result = responseText;
         }
-        throw new Error("Respons server bukan JSON yang valid.");
     }
 
     if (!response.ok) {
-        const serverMessage = result && (result.message || result.error);
+        const serverMessage = typeof result === "string"
+            ? result
+            : result && (result.message || result.error);
         throw new Error(
-            typeof serverMessage === "string"
+            typeof serverMessage === "string" && serverMessage
                 ? serverMessage
-                : `Gagal memuat tugas (HTTP ${response.status}).`
+                : `Permintaan gagal (HTTP ${response.status}).`
         );
     }
 
     return result;
+}
+
+function isTask(item) {
+    return item &&
+        typeof item === "object" &&
+        item.id !== undefined &&
+        typeof item.judul === "string" &&
+        typeof item.matkul === "string" &&
+        typeof item.deadline === "string" &&
+        typeof item.selesai === "boolean";
 }
 
 async function loadTasks() {
@@ -108,15 +129,7 @@ async function loadTasks() {
 
     try {
         const result = await api("/api/tugas");
-        const validTasks = Array.isArray(result) && result.every((item) =>
-            item &&
-            typeof item === "object" &&
-            item.id !== undefined &&
-            typeof item.judul === "string" &&
-            typeof item.matkul === "string" &&
-            typeof item.deadline === "string" &&
-            typeof item.selesai === "boolean"
-        );
+        const validTasks = Array.isArray(result) && result.every(isTask);
         if (!validTasks) {
             throw new Error("Format data tugas dari server tidak valid.");
         }
@@ -124,13 +137,58 @@ async function loadTasks() {
         task = result;
         loadstate.dataset.state = "loaded";
         loadstate.textContent = "";
+        submitButton.disabled = false;
     } catch (error) {
         loadstate.dataset.state = "error";
         loadstate.textContent = `Gagal memuat tugas: ${error.message}`;
         retryButton.hidden = false;
+        submitButton.disabled = true;
     }
     render();
 }
+
+taskform.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const judul = judulInput.value.trim();
+    const matkul = matkulInput.value;
+    const deadline = deadlineInput.value;
+
+    if (judul.length < 3) {
+        formerror.textContent = "Judul tugas harus terdiri dari minimal 3 karakter.";
+        return;
+    }
+
+    if (!matkul || !deadline) {
+        formerror.textContent = "Mata kuliah dan deadline wajib dipilih.";
+        return;
+    }
+
+    submitButton.disabled = true;
+    formerror.textContent = "";
+
+    try {
+        const createdTask = await api("/api/tugas", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ judul, matkul, deadline })
+        });
+
+        if (!isTask(createdTask)) {
+            throw new Error("Format tugas dari server tidak valid.");
+        }
+
+        task.push(createdTask);
+        taskform.reset();
+        render();
+    } catch (error) {
+        formerror.textContent = `Gagal menambahkan tugas: ${error.message}`;
+    } finally {
+        submitButton.disabled = loadstate.dataset.state !== "loaded";
+    }
+});
 
 filterButtons.forEach((button) => {
     button.addEventListener("click", () => {
